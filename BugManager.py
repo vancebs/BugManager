@@ -1,11 +1,25 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
+from script.BugManager import BugManager
 
-from BugManagerUI import BugManagerUI
-from BugManagerController import BugManagerController
+
+def launch():
+    bm = BugManager()
+    bm.launch()
+
+
+def test_local_alm():
+    from script.model.local_alm.spider.ProjectSpider import ProjectSpider
+    from script.model.local_alm.spider.GeneralSpider import GeneralSpider
+
+    gs = GeneralSpider()
+    gs.sync()
+
+    ps = ProjectSpider('/TCT/GApp/Gallery')
+    ps.sync()
+
+
+def test_alm():
+    pass
 
 if __name__ == "__main__":
-    controller = BugManagerController()
-    ui = BugManagerUI()
-    ui.create(controller)
-    ui.show()
+    launch()
+    # test_local_alm()

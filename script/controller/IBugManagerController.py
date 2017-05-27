@@ -4,21 +4,21 @@
 from abc import abstractmethod, ABCMeta
 
 
-class IController(object):
+class IBugManagerController(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def cmd_sync(self):
+    def cmd_sync(self, view):
         pass
 
     @abstractmethod
-    def cmd_sync_all(self):
+    def cmd_sync_all(self, view):
         pass
 
     @abstractmethod
-    def cmd_view(self):
+    def cmd_view(self, view):
         pass
 
     @abstractmethod
-    def cmd_edit(self):
+    def cmd_edit(self, view):
         pass
