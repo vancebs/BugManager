@@ -12,7 +12,7 @@ class ICommand(object):
         self._mThread = None
         self._mIsRunning = False
 
-    def start(self, async, on_finished, param):
+    def start(self, async=False, on_finished=None, param=None):
         if async:
             self._mIsRunning = True
             self._mThread = threading.Thread(target=self._run, args=(on_finished, param))
@@ -21,8 +21,8 @@ class ICommand(object):
             self._mIsRunning = True
             self.on_start()
             self._mIsRunning = False
-            if on_finished:
-                on_finished(param)
+            # if on_finished:
+            #     on_finished(param)
 
     def cancel(self):
         self.on_cancel()

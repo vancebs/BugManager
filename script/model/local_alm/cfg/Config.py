@@ -19,6 +19,7 @@ class Config(object):
     KEY_FIELDS_LAST_UPDATE_TIME = 'fields_last_update_time'
     KEY_USERS_LAST_UPDATE_TIME = 'users_last_update_time'
     KEY_PROJECTS_LAST_UPDATE_TIME = 'projects_last_update_time'
+    KEY_TYPES_LAST_UPDATE_TIME = 'types_last_update_time'
 
     @staticmethod
     def project_db_dir():
@@ -83,6 +84,14 @@ class Config(object):
     def set_users_last_update_time(self, value, db=None):
         self.set_general_config(Config.KEY_USERS_LAST_UPDATE_TIME, Util.format_time_to_str(value), db)
 
+    # get last update time of users list
+    def get_types_last_update_time(self, db=None):
+        return self.get_general_config(Config.KEY_TYPES_LAST_UPDATE_TIME, Config.EARLY_SYNC_TIME, db)
+
+    # set last update time of users list
+    def set_types_last_update_time(self, value, db=None):
+        self.set_general_config(Config.KEY_TYPES_LAST_UPDATE_TIME, Util.format_time_to_str(value), db)
+
     # get last update time of projects list
     def get_projects_last_update_time(self, db=None):
         return self.get_general_config(Config.KEY_PROJECTS_LAST_UPDATE_TIME, Config.EARLY_SYNC_TIME, db)
@@ -103,23 +112,142 @@ class Config(object):
     def set_project_last_update_time(self, project, value, db=None):
         if db is None:
             with self._open_database() as db:
-                return self._set_project_last_update_time_internal(project, Util.format_time_to_float(value), db)
+                return Config._set_project_last_update_time_internal(project, Util.format_time_to_float(value), db)
         else:
-            return self._set_project_last_update_time_internal(project, Util.format_time_to_float(value), db)
+            return Config._set_project_last_update_time_internal(project, Util.format_time_to_float(value), db)
 
     def get_fields_dict(self, db=None):
         if db is None:
             with self._open_database() as db:
-                return self._get_fields_dict_internal(db)
+                return Config._get_fields_dict_internal(db)
         else:
-            return self._get_fields_dict_internal(db)
+            return Config._get_fields_dict_internal(db)
 
     def get_users_dict(self, db=None):
         if db is None:
             with self._open_database() as db:
-                return self._get_users_dict_internal(db)
+                return Config._get_users_dict_internal(db)
         else:
-            return self._get_users_dict_internal(db)
+            return Config._get_users_dict_internal(db)
+
+    def get_recent_list(self, db=None):
+        if db is None:
+            with self._open_database() as db:
+                return Config._get_recent_list_internal(db)
+        else:
+            return Config._get_recent_list_internal(db)
+
+    @staticmethod
+    def _get_recent_list_internal(db):
+        from script.model.local_alm.db.GeneralDatabase import GeneralDatabase
+        sql = (
+            'SELECT '
+            + GeneralDatabase.COL_RECENT_PATH
+            + ' FROM '
+            + GeneralDatabase.TABLE_RECENT
+            + ' ORDER BY '
+            + GeneralDatabase.COL_RECENT_ID
+            + ' DESC'
+        )
+
+        # query
+        c = db.cursor()
+        c.execute(sql)
+
+        # save result into a list
+        l = []
+        while True:
+            row = c.fetchone()
+            if row:
+                l.append(row[0])
+            else:
+                break
+
+        # close cursor
+        c.close()
+
+        return l
+
+
+    def remove_recent(self, path, db=None):
+        if db is None:
+            with self._open_database() as db:
+                return Config._remove_recent_internal(path, db)
+        else:
+            return Config._remove_recent_internal(path, db)
+
+    @staticmethod
+    def _remove_recent_internal(path, db):
+        from script.model.local_alm.db.GeneralDatabase import GeneralDatabase
+        sql = (
+            'DELETE FROM '
+            + GeneralDatabase.TABLE_RECENT
+            + ' WHERE '
+            + GeneralDatabase.COL_RECENT_PATH + '=?'
+        )
+
+        # do remove
+        db.execute(sql, (path, ))
+        db.commit()
+
+    def add_recent(self, path, db=None):
+        if db is None:
+            with self._open_database() as db:
+                return Config._add_recent_internal(path, db)
+        else:
+            return Config._add_recent_internal(path, db)
+
+    @staticmethod
+    def _add_recent_internal(path, db):
+        from script.model.local_alm.db.GeneralDatabase import GeneralDatabase
+        sql = (
+            'INSERT OR IGNORE INTO ' + GeneralDatabase.TABLE_RECENT + ' ('
+            + GeneralDatabase.COL_RECENT_PATH
+            + ') VALUES (?)'
+        )
+
+        # do add
+        db.execute(sql, (path, ))
+        db.commit()
+
+    def update_recent(self, path, db=None):
+        if db is None:
+            with self._open_database() as db:
+                return Config._update_recent_internal(path, db)
+        else:
+            return Config._update_recent_internal(path, db)
+
+    @staticmethod
+    def _update_recent_internal(path, db):
+        Config._remove_recent_internal(path, db)
+        Config._add_recent_internal(path, db)
+
+    def has_recent(self, path, db=None):
+        if db is None:
+            with self._open_database() as db:
+                return Config._has_recent_inteneral(path, db)
+        else:
+            return Config._has_recent_inteneral(path, db)
+
+    @staticmethod
+    def _has_recent_inteneral(path, db):
+        from script.model.local_alm.db.GeneralDatabase import GeneralDatabase
+        sql = (
+            'SELECT '
+            + GeneralDatabase.COL_RECENT_ID
+            + ' FROM '
+            + GeneralDatabase.TABLE_RECENT
+            + ' WHERE '
+            + GeneralDatabase.COL_RECENT_PATH + '=?'
+        )
+
+        # query
+        c = db.cursor()
+        c.execute(sql, (path, ))
+        has_recent = c.fetchone() is not None
+        c.close()
+
+        return has_recent
 
     @staticmethod
     def _get_config_internal(project, key, default, db):
@@ -153,8 +281,7 @@ class Config(object):
     def _set_config_internal(project, key, value, db):
         from script.model.local_alm.db.GeneralDatabase import GeneralDatabase
         sql_insert = (
-            'INSERT OR IGNORE INTO '
-            + GeneralDatabase.TABLE_CONFIG + ' ('
+            'INSERT OR IGNORE INTO ' + GeneralDatabase.TABLE_CONFIG + ' ('
             + GeneralDatabase.COL_CONFIG_PROJECT
             + ',' + GeneralDatabase.COL_CONFIG_NAME
             + ',' + GeneralDatabase.COL_CONFIG_VALUE

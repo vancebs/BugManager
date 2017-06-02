@@ -1,4 +1,5 @@
 *.pyc
 .idea
 database
+excel
 test/database

@@ -8,8 +8,7 @@ from view.BugManagerView import BugManagerView
 class BugManager(object):
     def launch(self):
         controller = BugManagerController()
-        ui = BugManagerView()
-        ui.create(controller)
+        ui = BugManagerView(controller)
         ui.show()
 
 if __name__ == "__main__":

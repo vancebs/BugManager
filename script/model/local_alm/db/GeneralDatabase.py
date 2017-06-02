@@ -6,7 +6,7 @@ from script.model.local_alm.db.Database import Database
 
 
 class GeneralDatabase(Database):
-    _VERSION = 2
+    _VERSION = 4
 
     TABLE_FIELDS = 'fields'
     COL_FIELDS_ID = 'id'
@@ -37,6 +37,16 @@ class GeneralDatabase(Database):
     COL_PROJECTS_FLAG_SYNC = 'flag_sync'
     COL_PROJECTS_LAST_UPDATE_TIME = 'last_update_time'
     INDEX_PROJECTS_NAME = 'projects_name_index'
+
+    TABLE_RECENT = 'recent'
+    COL_RECENT_ID = 'id'
+    COL_RECENT_PATH = 'path'
+    INDEX_RECENT_PATH = 'recent_path_index'
+
+    TABLE_TYPES = 'types'
+    COL_TYPES_ID = 'id'
+    COL_TYPES_NAME = 'name'
+    INDEX_TYPES_NAME = 'types_name_index'
 
     def __init__(self):
         Database.__init__(self, Config.general_db_path(), GeneralDatabase._VERSION)
@@ -97,6 +107,32 @@ class GeneralDatabase(Database):
             db.execute('CREATE UNIQUE INDEX ' + GeneralDatabase.INDEX_PROJECTS_NAME + ' ON '
                        + GeneralDatabase.TABLE_PROJECTS + ' ('
                        + GeneralDatabase.COL_PROJECTS_NAME
+                       + ')')
+
+            current_ver += 1
+
+        # 2 => 3
+        if current_ver == 2:
+            db.execute('CREATE TABLE ' + GeneralDatabase.TABLE_RECENT + ' ('
+                       + GeneralDatabase.COL_RECENT_ID + ' INTEGER PRIMARY KEY AUTOINCREMENT,'
+                       + GeneralDatabase.COL_RECENT_PATH + ' TEXT'
+                       + ')')
+            db.execute('CREATE UNIQUE INDEX ' + GeneralDatabase.INDEX_RECENT_PATH + ' ON '
+                       + GeneralDatabase.TABLE_RECENT + ' ('
+                       + GeneralDatabase.COL_RECENT_PATH
+                       + ')')
+
+            current_ver += 1
+
+        # 3 => 4
+        if current_ver == 3:
+            db.execute('CREATE TABLE ' + GeneralDatabase.TABLE_TYPES + ' ('
+                       + GeneralDatabase.COL_TYPES_ID + ' INTEGER PRIMARY KEY AUTOINCREMENT,'
+                       + GeneralDatabase.COL_TYPES_NAME + ' TEXT'
+                       + ')')
+            db.execute('CREATE UNIQUE INDEX ' + GeneralDatabase.INDEX_TYPES_NAME + ' ON '
+                       + GeneralDatabase.TABLE_TYPES + ' ('
+                       + GeneralDatabase.COL_TYPES_NAME
                        + ')')
 
             current_ver += 1

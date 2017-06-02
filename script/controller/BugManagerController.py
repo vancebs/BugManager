@@ -6,42 +6,50 @@ import tkMessageBox
 from IBugManagerController import IBugManagerController
 from script.controller.command.CmdSync import CmdSync
 from script.controller.command.CmdSyncAll import CmdSyncAll
+from script.controller.command.CmdOpen import CmdOpen
 
 
 class BugManagerController(IBugManagerController):
     def __init__(self):
-        self._mCmd = None
+        self._mSyncCmd = None
+
+    def cmd_open(self, view):
+        print ('cmd_open')
+        cmd = CmdOpen(view)
+        cmd.start()
 
     def cmd_sync(self, view):
-        if self._mCmd:
+        if self._mSyncCmd:
             yes = tkMessageBox.askyesno(title='Cancel', message='Cancel may loose data, Are you sure?')
             if yes:
-                self._mCmd.cancel()
+                if self._mSyncCmd:
+                    self._mSyncCmd.cancel()
         else:
             print ('cmd_sync start ...')
             view['text'] = 'Sync\nCancel'
-            self._mCmd = CmdSync()
-            self._mCmd.start(True, self._on_cmd_sync_finished, view)
+            self._mSyncCmd = CmdSync()
+            self._mSyncCmd.start(True, self._on_cmd_sync_finished, view)
 
     def _on_cmd_sync_finished(self, view):
         view['text'] = 'Sync'
-        self._mCmd = None
+        self._mSyncCmd = None
         print ('cmd_sync done')
 
     def cmd_sync_all(self, view):
-        if self._mCmd:
+        if self._mSyncCmd:
             yes = tkMessageBox.askyesno(title='Cancel', message='Cancel may loose data, Are you sure?')
             if yes:
-                self._mCmd.cancel()
+                if self._mSyncCmd:
+                    self._mSyncCmd.cancel()
         else:
             print ('cmd_sync_all start ...')
             view['text'] = 'Sync All\nCancel'
-            self._mCmd = CmdSyncAll()
-            self._mCmd.start(True, self._on_cmd_sync_all_finished, view)
+            self._mSyncCmd = CmdSyncAll()
+            self._mSyncCmd.start(True, self._on_cmd_sync_all_finished, view)
 
     def _on_cmd_sync_all_finished(self, view):
         view['text'] = 'Sync All'
-        self._mCmd = None
+        self._mSyncCmd = None
         print ('cmd_sync_all done')
 
     def cmd_view(self, view):

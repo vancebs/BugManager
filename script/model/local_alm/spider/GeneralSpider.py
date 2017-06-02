@@ -66,6 +66,16 @@ class GeneralSpider(object):
         + GeneralDatabase.COL_PROJECTS_NAME + '=?'
     )
 
+    _SQL_INSERT_TYPES = (
+        'INSERT OR IGNORE INTO '
+        + GeneralDatabase.TABLE_TYPES + ' ('
+        + GeneralDatabase.COL_TYPES_NAME
+        + ') VALUES (?)'
+    )
+
+    # only one item, unnecessary to update
+    # _SQL_UPDATE_TYPES =
+
     def __init__(self):
         self._mConfig = Config()
         self._mDatabase = GeneralDatabase()
@@ -76,6 +86,7 @@ class GeneralSpider(object):
     def sync(self, force_update=False):
         self.sync_fields(force_update)
         self.sync_users(force_update)
+        self.sync_types(force_update)
         self.sync_projects(force_update)
 
     def sync_fields(self, force_update=False):
@@ -85,13 +96,12 @@ class GeneralSpider(object):
         # check force update
         if not force_update:
             # check frequency
-            with self._open_database() as db:
-                last_updated_time = self._mConfig.get_fields_last_update_time()
-                delta_time = Util.time_sub(current_time, last_updated_time)
-                if Util.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
-                    # unnecessary to sync if duration is less than frequency
-                    print ('\tcanceled. unnecessary to sync.')
-                    return
+            last_updated_time = self._mConfig.get_fields_last_update_time()
+            delta_time = Util.time_sub(current_time, last_updated_time)
+            if Util.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
+                # unnecessary to sync if duration is less than frequency
+                print ('\tcanceled. unnecessary to sync.')
+                return
 
         # sync
         with self._open_database() as db:
@@ -118,13 +128,12 @@ class GeneralSpider(object):
         # check force update
         if not force_update:
             # check frequency
-            with self._open_database() as db:
-                last_updated_time = self._mConfig.get_users_last_update_time()
-                delta_time = Util.time_sub(current_time, last_updated_time)
-                if Util.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
-                    # unnecessary to sync if duration is less than frequency
-                    print ('\tcanceled. unnecessary to sync.')
-                    return
+            last_updated_time = self._mConfig.get_users_last_update_time()
+            delta_time = Util.time_sub(current_time, last_updated_time)
+            if Util.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
+                # unnecessary to sync if duration is less than frequency
+                print ('\tcanceled. unnecessary to sync.')
+                return
 
         # sync
         with self._open_database() as db:
@@ -152,13 +161,12 @@ class GeneralSpider(object):
         # check force update
         if not force_update:
             # check frequency
-            with self._open_database() as db:
-                last_updated_time = self._mConfig.get_projects_last_update_time()
-                delta_time = Util.time_sub(current_time, last_updated_time)
-                if Util.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
-                    # unnecessary to sync if duration is less than frequency
-                    print ('\tcanceled. unnecessary to sync.')
-                    return
+            last_updated_time = self._mConfig.get_projects_last_update_time()
+            delta_time = Util.time_sub(current_time, last_updated_time)
+            if Util.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
+                # unnecessary to sync if duration is less than frequency
+                print ('\tcanceled. unnecessary to sync.')
+                return
 
         # sync
         with self._open_database() as db:
@@ -175,5 +183,34 @@ class GeneralSpider(object):
                 self._mConfig.set_projects_last_update_time(current_time, db)
             else:
                 print ('\tfetch projects failed')
+
+        return result
+
+    def sync_types(self, force_update=False):
+        print ('sync types ...')
+        current_time = Util.current_time()
+
+        # check force update
+        if not force_update:
+            # check frequency
+            last_updated_time = self._mConfig.get_types_last_update_time()
+            delta_time = Util.time_sub(current_time, last_updated_time)
+            if Util.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
+                # unnecessary to sync if duration is less than frequency
+                print ('\tcanceled. unnecessary to sync.')
+                return
+
+        # sync
+        with self._open_database() as db:
+            (result, count) = ImHandler.sync_types(lambda name: db.execute(GeneralSpider._SQL_INSERT_TYPES, (name, )))
+
+            # check result
+            if result:
+                print ('\t[%d] types updated.' % count)
+
+                # update last sync time
+                self._mConfig.set_types_last_update_time(current_time, db)
+            else:
+                print ('\tfetch types failed')
 
         return result

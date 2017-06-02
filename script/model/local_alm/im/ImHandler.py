@@ -23,6 +23,8 @@ class ImHandler(object):
     _COL_PROJECT_NAME = 0
     _COL_PROJECT_IS_ACTIVE = 1
 
+    _COL_TYPE_NAME = 0
+
     @staticmethod
     def query(im_cmd, on_line, param=None):
         count = 0
@@ -123,4 +125,17 @@ class ImHandler(object):
     def _on_sync_bug_get_line(line, cb):
         parts = line.split(ImHandler._DELIM)
         cb(parts[ImHandler._COL_BUG_ID], parts[ImHandler._COL_BUG_MODIFIED_TIME])
+
+    @staticmethod
+    def sync_types(on_type_fetched):
+        # im command
+        cmd = 'im types --fields=name --fieldsDelim="' + ImHandler._DELIM + '"'
+
+        # query from im
+        return ImHandler.query(cmd, ImHandler._on_sync_type_get_line, on_type_fetched)
+
+    @staticmethod
+    def _on_sync_type_get_line(line, cb):
+        parts = line.split(ImHandler._DELIM)
+        cb(parts[ImHandler._COL_TYPE_NAME])
 

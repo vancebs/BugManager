@@ -8,6 +8,10 @@ class IBugManagerController(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
+    def cmd_open(self, view):
+        pass
+
+    @abstractmethod
     def cmd_sync(self, view):
         pass
 
