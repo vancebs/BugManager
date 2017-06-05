@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from Tkinter import *
+from Tkinter import Tk
+from ttk import *
+from Tkconstants import *
 from View import View
 from script.controller.BugManagerController import BugManagerController
 
@@ -18,13 +20,13 @@ class BugManagerView(View):
 
         # root window
         root = Tk()
-        root.geometry('600x60')
+        root.geometry('600x50')
         root.attributes("-toolwindow", 1)
         root.wm_attributes("-topmost", 1)
 
         ##########################
         # frame for file operation
-        frame_file = Frame(root, bg='green')
+        frame_file = Frame(root)
         frame_file.pack(fill=Y,
                         padx=View.BUTTON_PADDING_X,
                         pady=View.BUTTON_PADDING_Y,
@@ -32,36 +34,27 @@ class BugManagerView(View):
 
         # button open
         btn_open = Button(frame_file, text='Open', command=lambda: self._mController.cmd_open(root))
-        btn_open.pack(fill=Y,
-                      padx=View.BUTTON_PADDING_X,
-                      pady=View.BUTTON_PADDING_Y,
-                      side=LEFT)
+        btn_open.pack(side=LEFT)
 
         ##########################
         # frame for sync
-        frame_sync = Frame(root, bg='red')
+        frame_sync = Frame(root)
         frame_sync.pack(fill=Y,
                         padx=View.BUTTON_PADDING_X,
                         pady=View.BUTTON_PADDING_Y,
                         side=LEFT)
 
         # button sync
-        btn_sync = Button(frame_sync, text='Sync', command=lambda:self._mController.cmd_sync(root, False))
-        btn_sync.pack(fill=Y,
-                      padx=View.BUTTON_PADDING_X,
-                      pady=View.BUTTON_PADDING_Y,
-                      side=LEFT)
+        btn_sync = Button(frame_sync, text='Sync', command=lambda: self._mController.cmd_sync(root, False))
+        btn_sync.pack(side=LEFT)
 
         # button sync all
-        btn_sync_all = Button(frame_sync, text='Sync All', command=lambda:self._mController.cmd_sync(root, True))
-        btn_sync_all.pack(fill=Y,
-                          padx=View.BUTTON_PADDING_X,
-                          pady=View.BUTTON_PADDING_Y,
-                          side=LEFT)
+        btn_sync_all = Button(frame_sync, text='Sync All', command=lambda: self._mController.cmd_sync(root, True))
+        btn_sync_all.pack(side=LEFT)
 
         ##############################
         # frame for edit
-        frame_edit = Frame(root, bg='blue')
+        frame_edit = Frame(root)
         frame_edit.pack(fill=Y,
                         padx=View.BUTTON_PADDING_X,
                         pady=View.BUTTON_PADDING_Y,
@@ -69,24 +62,15 @@ class BugManagerView(View):
 
         # button view
         btn_view = Button(frame_edit, text='View', command=lambda: self._mController.cmd_view(root))
-        btn_view.pack(fill=Y,
-                      padx=View.BUTTON_PADDING_X,
-                      pady=View.BUTTON_PADDING_Y,
-                      side=LEFT)
+        btn_view.pack(side=LEFT)
 
         # button edit
         btn_edit = Button(frame_edit, text='Edit', command=lambda: self._mController.cmd_edit(root))
-        btn_edit.pack(fill=Y,
-                      padx=View.BUTTON_PADDING_X,
-                      pady=View.BUTTON_PADDING_Y,
-                      side=LEFT)
+        btn_edit.pack(side=LEFT)
 
         # button create
         btn_create = Button(frame_edit, text='Create', command=lambda: self._mController.cmd_create(root))
-        btn_create.pack(fill=Y,
-                        padx=View.BUTTON_PADDING_X,
-                        pady=View.BUTTON_PADDING_Y,
-                        side=LEFT)
+        btn_create.pack(side=LEFT)
 
         # save to member var
         self._mRootWindow = root

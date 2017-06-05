@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from Tkinter import *
+from ttk import *
+from Tkconstants import *
 from View import View
 from script.controller.ConfigExcelController import ConfigExcelController
 from ModalDialogView import ModalDialogView
@@ -20,7 +21,7 @@ class ConfigExcelView(ModalDialogView):
 
         ##############
         # frame of bottom bar
-        frame_bottom_bar = Frame(root, bg='gray')
+        frame_bottom_bar = Frame(root)
         frame_bottom_bar.pack(fill=X,
                               padx=View.BUTTON_PADDING_X,
                               pady=View.BUTTON_PADDING_Y,
