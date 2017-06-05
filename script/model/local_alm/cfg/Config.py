@@ -1,12 +1,12 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from script.model.local_alm.util.Util import Util
+from script.model.local_alm.util.TimeUtil import TimeUtil
 
 
 class Config(object):
     # EARLY_SYNC_TIME = Util.format_time('2015-1-1 00:00:00')
-    EARLY_SYNC_TIME = Util.format_time(0)
+    EARLY_SYNC_TIME = TimeUtil.format_time(0)
 
     PATH_DB_ROOT_DIR = 'database'
     PATH_DB_PROJECT_DIR = 'project'
@@ -74,7 +74,7 @@ class Config(object):
 
     # et last update time of fields list
     def set_fields_last_update_time(self, value, db=None):
-        self.set_general_config(Config.KEY_FIELDS_LAST_UPDATE_TIME, Util.format_time_to_str(value), db)
+        self.set_general_config(Config.KEY_FIELDS_LAST_UPDATE_TIME, TimeUtil.format_time_to_str(value), db)
 
     # get last update time of users list
     def get_users_last_update_time(self, db=None):
@@ -82,7 +82,7 @@ class Config(object):
 
     # set last update time of users list
     def set_users_last_update_time(self, value, db=None):
-        self.set_general_config(Config.KEY_USERS_LAST_UPDATE_TIME, Util.format_time_to_str(value), db)
+        self.set_general_config(Config.KEY_USERS_LAST_UPDATE_TIME, TimeUtil.format_time_to_str(value), db)
 
     # get last update time of users list
     def get_types_last_update_time(self, db=None):
@@ -90,7 +90,7 @@ class Config(object):
 
     # set last update time of users list
     def set_types_last_update_time(self, value, db=None):
-        self.set_general_config(Config.KEY_TYPES_LAST_UPDATE_TIME, Util.format_time_to_str(value), db)
+        self.set_general_config(Config.KEY_TYPES_LAST_UPDATE_TIME, TimeUtil.format_time_to_str(value), db)
 
     # get last update time of projects list
     def get_projects_last_update_time(self, db=None):
@@ -98,7 +98,7 @@ class Config(object):
 
     # set last update time of projects list
     def set_projects_last_update_time(self, value, db=None):
-        self.set_general_config(Config.KEY_PROJECTS_LAST_UPDATE_TIME, Util.format_time_to_str(value), db)
+        self.set_general_config(Config.KEY_PROJECTS_LAST_UPDATE_TIME, TimeUtil.format_time_to_str(value), db)
 
     # get last update time of a signal project
     def get_project_last_update_time(self, project, db=None):
@@ -112,9 +112,9 @@ class Config(object):
     def set_project_last_update_time(self, project, value, db=None):
         if db is None:
             with self._open_database() as db:
-                return Config._set_project_last_update_time_internal(project, Util.format_time_to_float(value), db)
+                return Config._set_project_last_update_time_internal(project, TimeUtil.format_time_to_float(value), db)
         else:
-            return Config._set_project_last_update_time_internal(project, Util.format_time_to_float(value), db)
+            return Config._set_project_last_update_time_internal(project, TimeUtil.format_time_to_float(value), db)
 
     def get_fields_dict(self, db=None):
         if db is None:

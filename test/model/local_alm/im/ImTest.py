@@ -4,7 +4,7 @@
 from unittest import TestCase
 
 from script.model.local_alm.im.Im import Im
-from script.model.local_alm.util.Util import Util
+from script.model.local_alm.util.TimeUtil import TimeUtil
 from script.model.local_alm.util.MultiThreadRunner import MultiThreadRunner
 from threading import Lock
 
@@ -26,11 +26,11 @@ class ImTest(TestCase):
     )
 
     def test_im(self):
-        t1 = Util.format_time_to_float(Util.current_time())
+        t1 = TimeUtil.format_time_to_float(TimeUtil.current_time())
         for id in self.BUG_LIST:
             print ('[%d] %s' % (id, Im.execute('im viewissue --showRichContent %s' % id)))
 
-        t2 = Util.format_time_to_float(Util.current_time())
+        t2 = TimeUtil.format_time_to_float(TimeUtil.current_time())
         print ('total time: %s' % (t2 - t1))
 
         print ('test muti thread')
@@ -38,7 +38,7 @@ class ImTest(TestCase):
         mtr = MultiThreadRunner(5, self.thread_run)
         mtr.start(self.BUG_LIST)
         mtr.join()
-        t3 = Util.format_time_to_float(Util.current_time())
+        t3 = TimeUtil.format_time_to_float(TimeUtil.current_time())
         print ('total time: %s' % (t3 - t2))
 
         print ('remaining threads: %d' % mtr.get_running_thread_count())

@@ -1,59 +1,64 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from Tkinter import *
 import tkMessageBox
-from IBugManagerController import IBugManagerController
+from script.view.SyncProgressView import SyncProgressView
+from script.controller.SyncProgressController import SyncProgressController
 from script.controller.command.CmdSync import CmdSync
-from script.controller.command.CmdSyncAll import CmdSyncAll
 from script.controller.command.CmdOpen import CmdOpen
+from script.controller.command.CmdView import CmdView
+from script.controller.command.CmdEdit import CmdEdit
+from script.controller.command.CmdCreate import CmdCreate
 
 
-class BugManagerController(IBugManagerController):
-    def __init__(self):
-        self._mSyncCmd = None
-
+class BugManagerController(object):
     def cmd_open(self, view):
         print ('cmd_open')
         cmd = CmdOpen(view)
         cmd.start()
 
-    def cmd_sync(self, view):
-        if self._mSyncCmd:
-            yes = tkMessageBox.askyesno(title='Cancel', message='Cancel may loose data, Are you sure?')
-            if yes:
-                if self._mSyncCmd:
-                    self._mSyncCmd.cancel()
-        else:
-            print ('cmd_sync start ...')
-            view['text'] = 'Sync\nCancel'
-            self._mSyncCmd = CmdSync()
-            self._mSyncCmd.start(True, self._on_cmd_sync_finished, view)
+    def cmd_sync(self, view, force_update=False):
+        print ('cmd_sync start (force_update: %d) ...' % force_update)
 
-    def _on_cmd_sync_finished(self, view):
-        view['text'] = 'Sync'
-        self._mSyncCmd = None
+        # create & show progress dialog
+        progress_view = SyncProgressView(view, SyncProgressController(view))
+        progress_view.reset()
+        progress_view.show()
+
+        # define callbacks
+        def on_project_progress(progress, max_progress):
+            progress_view.set_projects_progress(progress, max_progress)
+
+        def on_sync_data_progress(progress, max_progress):
+            progress_view.set_parser_bug_raw_progress(progress, max_progress)
+
+        def on_sync_raw_progress(progress, max_progress):
+            progress_view.set_fetch_bug_raw_progress(progress, max_progress)
+
+        # run command
+        cmd = CmdSync(
+            on_project_progress=on_project_progress,
+            on_sync_data_progress=on_sync_data_progress,
+            on_sync_raw_progress=on_sync_raw_progress,
+            force_update=force_update)
+        cmd.start(True, self._on_cmd_sync_finished, progress_view)
+
+    def _on_cmd_sync_finished(self, progress_view):
+        progress_view.dismiss(1000)  # dismiss progress view
         print ('cmd_sync done')
-
-    def cmd_sync_all(self, view):
-        if self._mSyncCmd:
-            yes = tkMessageBox.askyesno(title='Cancel', message='Cancel may loose data, Are you sure?')
-            if yes:
-                if self._mSyncCmd:
-                    self._mSyncCmd.cancel()
-        else:
-            print ('cmd_sync_all start ...')
-            view['text'] = 'Sync All\nCancel'
-            self._mSyncCmd = CmdSyncAll()
-            self._mSyncCmd.start(True, self._on_cmd_sync_all_finished, view)
-
-    def _on_cmd_sync_all_finished(self, view):
-        view['text'] = 'Sync All'
-        self._mSyncCmd = None
-        print ('cmd_sync_all done')
 
     def cmd_view(self, view):
         print ('cmd_view')
+        cmd = CmdView(view)
+        cmd.start()
 
     def cmd_edit(self, view):
         print ('cmd_edit')
+        cmd = CmdEdit(view)
+        cmd.start()
+
+    def cmd_create(self, view):
+        print ('cmd_create')
+        cmd = CmdCreate(view)
+        cmd.start()
+

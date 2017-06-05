@@ -3,7 +3,7 @@
 
 from script.model.local_alm.im.Im import Im
 from script.model.local_alm.im.ImParam import ImParam
-from script.model.local_alm.util.Util import Util
+from script.model.local_alm.util.TimeUtil import TimeUtil
 
 
 class ImHandler(object):
@@ -31,7 +31,7 @@ class ImHandler(object):
         (code, out, err) = Im.execute(im_cmd)
         if code == 0:
             # insert lines
-            lines = Util.str_to_utf8(out).split("\n")
+            lines = TimeUtil.str_to_utf8(out).split("\n")
             for line in lines:
                 count += 1
                 line = line.strip()
@@ -110,7 +110,7 @@ class ImHandler(object):
                     ImParam.define_not(ImParam.define_versioned()),
                     ImParam.define_field('Project', project),
                     ImParam.define_field('Type', 'Defect', 'Stability Defect', 'General FR'),  # TODO config later
-                    ImParam.define_field_time_from('Modified Date', Util.format_time_to_str(sync_from_time))
+                    ImParam.define_field_time_from('Modified Date', TimeUtil.format_time_to_str(sync_from_time))
                 )
             )
         )
@@ -138,4 +138,21 @@ class ImHandler(object):
     def _on_sync_type_get_line(line, cb):
         parts = line.split(ImHandler._DELIM)
         cb(parts[ImHandler._COL_TYPE_NAME])
+
+    @staticmethod
+    def about():
+        (code, out, err) = Im.execute('im about')
+        if code == 0:
+            return out
+        else:
+            print ('im about failed: %s' % err)
+            return None
+
+    @staticmethod
+    def view_bug_gui(bug_id):
+        Im.execute('im viewissue --gui %d' % bug_id)
+
+    @staticmethod
+    def edit_bug_gui(bug_id):
+        Im.execute('im editissue --gui %d' % bug_id)
 

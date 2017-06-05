@@ -15,6 +15,7 @@ class MultiThreadRunner(object):
         self._mQueue = Queue()
         self._mResultQueue = Queue()
         self._mLock = Lock()
+        self._mFinishedTaskCount = 0
 
         for i in range(thread_count):
             self._mThreadList.append([None, (runner, i, global_params)])
@@ -61,6 +62,11 @@ class MultiThreadRunner(object):
                 param = self._mQueue.get_nowait()
                 self._mResultQueue.put(runner(param, global_params))
                 self._mQueue.task_done()
+
+                # finished task count ++
+                self._mLock.acquire()
+                self._mFinishedTaskCount += 1
+                self._mLock.release()
         except Empty:
             self._mLock.acquire()
 
@@ -76,4 +82,5 @@ class MultiThreadRunner(object):
 
             self._mLock.release()
 
-
+    def get_finished_task_count(self):
+        return self._mFinishedTaskCount

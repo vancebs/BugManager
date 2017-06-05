@@ -64,7 +64,7 @@ class CmdNewExcel(ICommand):
         # config excel
         controller = ConfigExcelController(path)
         view = ConfigExcelView(self._mParentView, controller)
-        view.show()
+        view.show(wait=True)
 
         if not controller.is_success():
             # remove file if config canceled by user

@@ -1,5 +1,6 @@
 *.pyc
 .idea
-database
-excel
-test/database
+/database
+/excel
+/test/database
+/test/excel

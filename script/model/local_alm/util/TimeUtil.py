@@ -4,7 +4,7 @@
 import time
 
 
-class Util(object):
+class TimeUtil(object):
     _DATETIME_FORMAT_CHINESE = '%Y-%m-%d %H:%M:%S'
     _DATETIME_FORMAT_ENGLISH = '%b %d, %Y %I:%M:%S %p'
     _DATETIME_FORMAT_TARGET = _DATETIME_FORMAT_ENGLISH
@@ -21,11 +21,11 @@ class Util(object):
     def format_time(time_src):
         time_formatted = None
         if isinstance(time_src, str) or isinstance(time_src, unicode):
-            for f in Util._DATETIME_FORMATS:
+            for f in TimeUtil._DATETIME_FORMATS:
                 try:
                     time_formatted = time.strptime(time_src, f)
                     break
-                except ValueError, e:
+                except ValueError:
                     pass
 
             if time_formatted is None:
@@ -45,24 +45,24 @@ class Util(object):
 
     @staticmethod
     def format_time_to_str(time_src):
-        return time.strftime(Util._DATETIME_FORMAT_TARGET, Util.format_time(time_src))
+        return time.strftime(TimeUtil._DATETIME_FORMAT_TARGET, TimeUtil.format_time(time_src))
 
     @staticmethod
     def format_time_to_float(time_src):
-        return time.mktime(Util.format_time(time_src))
+        return time.mktime(TimeUtil.format_time(time_src))
 
     @staticmethod
     def format_time_to_long(time_src):
-        return long(time.mktime(Util.format_time(time_src)))
+        return long(time.mktime(TimeUtil.format_time(time_src)))
 
     @staticmethod
     def str_to_utf8(str_src):
         # try decode with known types
-        for codec in Util._CODEC_CHECK_LIST:
+        for codec in TimeUtil._CODEC_CHECK_LIST:
             # print('try codec: %s' % codec)
             try:
                 return str_src.decode(codec).encode('utf-8')
-            except UnicodeDecodeError, e:
+            except UnicodeDecodeError:
                 pass
         raise UnicodeDecodeError('cannot detect codec')
 
@@ -72,12 +72,12 @@ class Util(object):
 
     @staticmethod
     def time_add(time_src, add):
-        t = Util.format_time_to_float(time_src)
-        a = Util.format_time_to_float(add)
-        return Util.format_time(t + a)
+        t = TimeUtil.format_time_to_float(time_src)
+        a = TimeUtil.format_time_to_float(add)
+        return TimeUtil.format_time(t + a)
 
     @staticmethod
     def time_sub(time_src, sub):
-        t = Util.format_time_to_float(time_src)
-        s = Util.format_time_to_float(sub)
-        return Util.format_time(t - s)
+        t = TimeUtil.format_time_to_float(time_src)
+        s = TimeUtil.format_time_to_float(sub)
+        return TimeUtil.format_time(t - s)

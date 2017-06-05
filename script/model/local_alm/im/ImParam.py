@@ -3,7 +3,7 @@
 
 import time
 
-from script.model.local_alm.util.Util import Util
+from script.model.local_alm.util.TimeUtil import TimeUtil
 
 
 class ImParam(object):
@@ -56,7 +56,7 @@ class ImParam(object):
 
     @staticmethod
     def define_field_time_between(name, from_time, to_time):
-        return '(field[%s] between time %s and %s)' % (name, Util.format_time_to_str(from_time), Util.format_time_to_str(to_time))
+        return '(field[%s] between time %s and %s)' % (name, TimeUtil.format_time_to_str(from_time), TimeUtil.format_time_to_str(to_time))
 
     @staticmethod
     def define_field_time_from(name, from_time):

@@ -4,7 +4,7 @@
 from script.model.local_alm.cfg.Config import Config
 from script.model.local_alm.db.GeneralDatabase import GeneralDatabase
 from script.model.local_alm.im.ImHandler import ImHandler
-from script.model.local_alm.util.Util import Util
+from script.model.local_alm.util.TimeUtil import TimeUtil
 
 
 class GeneralSpider(object):
@@ -91,14 +91,14 @@ class GeneralSpider(object):
 
     def sync_fields(self, force_update=False):
         print ('sync fields ...')
-        current_time = Util.current_time()
+        current_time = TimeUtil.current_time()
 
         # check force update
         if not force_update:
             # check frequency
             last_updated_time = self._mConfig.get_fields_last_update_time()
-            delta_time = Util.time_sub(current_time, last_updated_time)
-            if Util.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
+            delta_time = TimeUtil.time_sub(current_time, last_updated_time)
+            if TimeUtil.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
                 # unnecessary to sync if duration is less than frequency
                 print ('\tcanceled. unnecessary to sync.')
                 return
@@ -123,14 +123,14 @@ class GeneralSpider(object):
 
     def sync_users(self, force_update=False):
         print ('sync users ...')
-        current_time = Util.current_time()
+        current_time = TimeUtil.current_time()
 
         # check force update
         if not force_update:
             # check frequency
             last_updated_time = self._mConfig.get_users_last_update_time()
-            delta_time = Util.time_sub(current_time, last_updated_time)
-            if Util.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
+            delta_time = TimeUtil.time_sub(current_time, last_updated_time)
+            if TimeUtil.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
                 # unnecessary to sync if duration is less than frequency
                 print ('\tcanceled. unnecessary to sync.')
                 return
@@ -156,14 +156,14 @@ class GeneralSpider(object):
 
     def sync_projects(self, force_update=False):
         print ('sync projects ...')
-        current_time = Util.current_time()
+        current_time = TimeUtil.current_time()
 
         # check force update
         if not force_update:
             # check frequency
             last_updated_time = self._mConfig.get_projects_last_update_time()
-            delta_time = Util.time_sub(current_time, last_updated_time)
-            if Util.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
+            delta_time = TimeUtil.time_sub(current_time, last_updated_time)
+            if TimeUtil.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
                 # unnecessary to sync if duration is less than frequency
                 print ('\tcanceled. unnecessary to sync.')
                 return
@@ -188,14 +188,14 @@ class GeneralSpider(object):
 
     def sync_types(self, force_update=False):
         print ('sync types ...')
-        current_time = Util.current_time()
+        current_time = TimeUtil.current_time()
 
         # check force update
         if not force_update:
             # check frequency
             last_updated_time = self._mConfig.get_types_last_update_time()
-            delta_time = Util.time_sub(current_time, last_updated_time)
-            if Util.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
+            delta_time = TimeUtil.time_sub(current_time, last_updated_time)
+            if TimeUtil.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
                 # unnecessary to sync if duration is less than frequency
                 print ('\tcanceled. unnecessary to sync.')
                 return
