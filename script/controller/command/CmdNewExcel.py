@@ -59,7 +59,7 @@ class CmdNewExcel(ICommand):
             return None
 
         # copy from template
-        shutil.copy('./template/template.xlsm', path)
+        shutil.copy('./template/general.xlsm', path)
 
         # config excel
         controller = ConfigExcelController(path)

@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-import tkMessageBox
 from script.view.SyncProgressView import SyncProgressView
 from script.controller.SyncProgressController import SyncProgressController
 from script.controller.command.CmdSync import CmdSync

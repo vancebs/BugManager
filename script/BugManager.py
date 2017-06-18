@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from controller.BugManagerController import BugManagerController
+from script.controller.BugManagerController import BugManagerController
 from view.BugManagerView import BugManagerView
 
 
