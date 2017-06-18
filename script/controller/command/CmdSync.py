@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from ICommand import ICommand
+from script.controller.command.ICommand import ICommand
 from script.model.local_alm.spider.ProjectSpider import ProjectSpider
 from script.model.local_alm.spider.GeneralSpider import GeneralSpider
 

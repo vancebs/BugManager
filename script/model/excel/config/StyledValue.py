@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 import xlwings as xw
-from Value import Value
+from script.model.excel.config.Value import Value
 
 
 class StyledValue(Value):

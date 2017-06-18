@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from ttk import *
-from Tkconstants import *
+from tkinter.ttk import *
+from tkinter.constants import *
 
 
 class ProgressView(Frame):

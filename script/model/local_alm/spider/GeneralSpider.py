@@ -90,7 +90,7 @@ class GeneralSpider(object):
         self.sync_projects(force_update)
 
     def sync_fields(self, force_update=False):
-        print ('sync fields ...')
+        print('sync fields ...')
         current_time = TimeUtil.current_time()
 
         # check force update
@@ -100,7 +100,7 @@ class GeneralSpider(object):
             delta_time = TimeUtil.time_sub(current_time, last_updated_time)
             if TimeUtil.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
                 # unnecessary to sync if duration is less than frequency
-                print ('\tcanceled. unnecessary to sync.')
+                print('\tcanceled. unnecessary to sync.')
                 return
 
         # sync
@@ -112,17 +112,17 @@ class GeneralSpider(object):
 
             # check result
             if result:
-                print ('\t[%d] fields updated.' % count)
+                print('\t[%d] fields updated.' % count)
 
                 # update last sync time
                 self._mConfig.set_fields_last_update_time(current_time, db)
             else:
-                print ('\tfetch fields failed')
+                print('\tfetch fields failed')
 
         return result
 
     def sync_users(self, force_update=False):
-        print ('sync users ...')
+        print('sync users ...')
         current_time = TimeUtil.current_time()
 
         # check force update
@@ -132,7 +132,7 @@ class GeneralSpider(object):
             delta_time = TimeUtil.time_sub(current_time, last_updated_time)
             if TimeUtil.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
                 # unnecessary to sync if duration is less than frequency
-                print ('\tcanceled. unnecessary to sync.')
+                print('\tcanceled. unnecessary to sync.')
                 return
 
         # sync
@@ -145,17 +145,17 @@ class GeneralSpider(object):
 
             # check result
             if result:
-                print ('\t[%d] users updated.' % count)
+                print('\t[%d] users updated.' % count)
 
                 # update last sync time
                 self._mConfig.set_users_last_update_time(current_time, db)
             else:
-                print ('\tfetch users failed')
+                print('\tfetch users failed')
 
         return result
 
     def sync_projects(self, force_update=False):
-        print ('sync projects ...')
+        print('sync projects ...')
         current_time = TimeUtil.current_time()
 
         # check force update
@@ -165,7 +165,7 @@ class GeneralSpider(object):
             delta_time = TimeUtil.time_sub(current_time, last_updated_time)
             if TimeUtil.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
                 # unnecessary to sync if duration is less than frequency
-                print ('\tcanceled. unnecessary to sync.')
+                print('\tcanceled. unnecessary to sync.')
                 return
 
         # sync
@@ -177,17 +177,17 @@ class GeneralSpider(object):
 
             # check result
             if result:
-                print ('\t[%d] projects updated.' % count)
+                print('\t[%d] projects updated.' % count)
 
                 # update last sync time
                 self._mConfig.set_projects_last_update_time(current_time, db)
             else:
-                print ('\tfetch projects failed')
+                print('\tfetch projects failed')
 
         return result
 
     def sync_types(self, force_update=False):
-        print ('sync types ...')
+        print('sync types ...')
         current_time = TimeUtil.current_time()
 
         # check force update
@@ -197,7 +197,7 @@ class GeneralSpider(object):
             delta_time = TimeUtil.time_sub(current_time, last_updated_time)
             if TimeUtil.format_time_to_float(delta_time) < GeneralSpider._SYNC_FREQUENCY:
                 # unnecessary to sync if duration is less than frequency
-                print ('\tcanceled. unnecessary to sync.')
+                print('\tcanceled. unnecessary to sync.')
                 return
 
         # sync
@@ -206,11 +206,11 @@ class GeneralSpider(object):
 
             # check result
             if result:
-                print ('\t[%d] types updated.' % count)
+                print('\t[%d] types updated.' % count)
 
                 # update last sync time
                 self._mConfig.set_types_last_update_time(current_time, db)
             else:
-                print ('\tfetch types failed')
+                print('\tfetch types failed')
 
         return result

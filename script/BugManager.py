@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 from script.controller.BugManagerController import BugManagerController
-from view.BugManagerView import BugManagerView
+from script.view.BugManagerView import BugManagerView
 
 
 class BugManager(object):

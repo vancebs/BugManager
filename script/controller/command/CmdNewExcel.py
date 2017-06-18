@@ -2,10 +2,10 @@
 # -*- coding: UTF-8 -*-
 
 import os
-import tkFileDialog
-import tkMessageBox
+import tkinter.filedialog
+import tkinter.messagebox
 import shutil
-from ICommand import ICommand
+from script.controller.command.ICommand import ICommand
 from script.model.local_alm.cfg.Config import Config
 from script.view.ConfigExcelView import ConfigExcelView
 from script.controller.ConfigExcelController import ConfigExcelController
@@ -30,16 +30,16 @@ class CmdNewExcel(ICommand):
 
         if path:
             cfg.add_recent(path)
-            print ('\t new excel: %s' % path)
+            print('\t new excel: %s' % path)
 
     def _new(self):
         # check whether default dir is created
         if not os.path.exists(CmdNewExcel._DEFAULT_EXCEL_DIR):
             os.makedirs(CmdNewExcel._DEFAULT_EXCEL_DIR)
         elif not os.path.isdir(CmdNewExcel._DEFAULT_EXCEL_DIR):
-            print ('[Warning] default path already exists a file')
+            print('[Warning] default path already exists a file')
 
-        path = tkFileDialog.asksaveasfilename(
+        path = tkinter.filedialog.asksaveasfilename(
             title='New excel',
             initialdir=CmdNewExcel._DEFAULT_EXCEL_DIR,
             filetypes=[('Excel (xlsm)', CmdNewExcel._EXT)])
@@ -55,7 +55,7 @@ class CmdNewExcel(ICommand):
         # check file already exists
         if os.path.exists(path):
             # not support override. TODO: may implement later
-            tkMessageBox.showerror('Error', 'File already exists.')
+            tkinter.messagebox.showerror('Error', 'File already exists.')
             return None
 
         # copy from template

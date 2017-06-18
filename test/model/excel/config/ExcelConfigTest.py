@@ -10,6 +10,9 @@ from script.model.excel.config.StyledValue import StyledValue
 
 
 class ExcelConfigTest(TestCase):
+    def __init__(self):
+        super().__init__()
+        self._mBook = None
 
     def tearDown(self):
         super(ExcelConfigTest, self).tearDown()
@@ -131,13 +134,13 @@ class ExcelConfigTest(TestCase):
 
         value = StyledValue()
 
-        print value.load(sheet.range(1, 1)).font_color
-        print value.load(sheet.range(2, 1)).font_color
-        print value.load(sheet.range(3, 1)).font_color
+        print(value.load(sheet.range(1, 1)).font_color)
+        print(value.load(sheet.range(2, 1)).font_color)
+        print(value.load(sheet.range(3, 1)).font_color)
 
-        print value.load(sheet.range(1, 1)).bg_color
-        print value.load(sheet.range(2, 1)).bg_color
-        print value.load(sheet.range(3, 1)).bg_color
+        print(value.load(sheet.range(1, 1)).bg_color)
+        print(value.load(sheet.range(2, 1)).bg_color)
+        print(value.load(sheet.range(3, 1)).bg_color)
 
         value.load(sheet.range(2, 1))
         value.font_color = StyledValue.COLOR_RED
@@ -155,15 +158,15 @@ class ExcelConfigTest(TestCase):
         value.bg_color = StyledValue.COLOR_BLUE
         value.save(sheet.range(3, 3))
 
-        print value.load(sheet.range(3, 2)).font_bold
+        print(value.load(sheet.range(3, 2)).font_bold)
         value.font_bold = True
         value.save(sheet.range(3, 2))
 
-        print value.load(sheet.range(3, 3)).font_italic
+        print(value.load(sheet.range(3, 3)).font_italic)
         value.font_italic = True
         value.save(sheet.range(3, 3))
 
-        print value.load(sheet.range(3, 4)).font_size
+        print(value.load(sheet.range(3, 4)).font_size)
         value.font_size = 20
         value.save(sheet.range(3, 4))
 

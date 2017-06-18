@@ -3,9 +3,9 @@
 
 import xlwings as xw
 
-from Key import Key
-from StyledValue import StyledValue
-from Value import Value
+from script.model.excel.config.Key import Key
+from script.model.excel.config.StyledValue import StyledValue
+from script.model.excel.config.Value import Value
 
 
 class ExcelConfig(object):

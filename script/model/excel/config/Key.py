@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from StyledValue import StyledValue
-from Value import Value
+from script.model.excel.config.StyledValue import StyledValue
+from script.model.excel.config.Value import Value
 
 
 class Key(StyledValue):

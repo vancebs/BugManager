@@ -4,7 +4,7 @@
 import xlwings as xw
 import os
 import shutil
-import tkMessageBox
+import tkinter.messagebox
 
 
 class ExcelHelper(object):
@@ -30,7 +30,7 @@ class ExcelHelper(object):
                 os.remove(path)  # remove the file
             elif override == ExcelHelper.CREATE_OVERRIDE_ASK:
                 # not support override. TODO: may implement later
-                yes = tkMessageBox.askyesno('Warning', 'File already exists. Override???')
+                yes = tkinter.messagebox.askyesno('Warning', 'File already exists. Override???')
                 if yes:
                     os.remove(path)  # remove the file
                 else:
@@ -80,5 +80,3 @@ class ExcelHelper(object):
         book = ExcelHelper.get_opened_workbook(path)
         if book:
             book.close()
-
-

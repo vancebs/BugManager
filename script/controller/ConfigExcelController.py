@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from command.CmdConfigExcel import CmdConfigExcel
+from script.controller.command.CmdConfigExcel import CmdConfigExcel
 
 
 class ConfigExcelController(object):
@@ -28,5 +28,3 @@ class ConfigExcelController(object):
 
     def is_success(self):
         return self._mIsSuccess
-
-

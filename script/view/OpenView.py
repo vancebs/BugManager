@@ -1,12 +1,12 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from Tkinter import Listbox
-from ttk import *
-from Tkconstants import *
-from View import View
+from tkinter import Listbox
+from tkinter.ttk import *
+from tkinter.constants import *
+from script.view.View import View
 from script.controller.OpenController import OpenController
-from ModalDialogView import ModalDialogView
+from script.view.ModalDialogView import ModalDialogView
 
 
 class OpenView(ModalDialogView):

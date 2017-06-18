@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from Tkinter import Toplevel
-from View import View
+from tkinter import Toplevel
+from script.view.View import View
 from abc import abstractmethod, ABCMeta
 
 

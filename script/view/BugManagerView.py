@@ -1,10 +1,10 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from Tkinter import Tk
-from ttk import *
-from Tkconstants import *
-from View import View
+from tkinter.ttk import *
+from tkinter.constants import *
+from tkinter import Tk
+from script.view.View import View
 from script.controller.BugManagerController import BugManagerController
 
 

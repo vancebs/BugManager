@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from ICommand import ICommand
+from script.controller.command.ICommand import ICommand
 from script.model.local_alm.cfg.Config import Config
 from script.model.excel.ExcelHelper import ExcelHelper
 
@@ -18,7 +18,7 @@ class CmdOpenExcel(ICommand):
         path = self.mPath
         cfg = Config()
 
-        print ('\t open excel: %s' % path)
+        print('\t open excel: %s' % path)
         self._open(path)
 
         # always move the opened item to top

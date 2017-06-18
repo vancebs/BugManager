@@ -31,7 +31,8 @@ class ImHandler(object):
         (code, out, err) = Im.execute(im_cmd)
         if code == 0:
             # insert lines
-            lines = TimeUtil.str_to_utf8(out).split("\n")
+            lines = out.split('\n')
+            #lines = TimeUtil.str_to_utf8(out).split("\n")
             for line in lines:
                 count += 1
                 line = line.strip()

@@ -12,7 +12,7 @@ from script.model.local_alm.util.MultiThreadRunner import MultiThreadRunner
 
 
 class ProjectSpider(object):
-    _DELIM = '==***=='
+    _DIVIDER = '==***=='
     _FROM_TIME_SHIFT = 30 * 60  # 30 min
     _COMMIT_THRESHOLD_FOR_RAW = 200
     _REG_MATCH_FIELD_NAME = re.compile('([\s\S]+?):([\s\S]*)')
@@ -185,7 +185,7 @@ class ProjectSpider(object):
         self.sync_data(on_sync_data_progress)
 
     def sync_bugs(self, total_fetch=False):
-        print ('sync bugs ...')
+        print('sync bugs ...')
 
         # save query time
         query_time = TimeUtil.current_time()
@@ -196,7 +196,7 @@ class ProjectSpider(object):
         else:
             sync_from_time = self._mConfig.get_project_last_update_time(self._mProject)
 
-        print ('\tfetch bug from last modified time [%s]' % TimeUtil.format_time_to_str(sync_from_time))
+        print('\t', 'fetch bug from last modified time [%s]' % TimeUtil.format_time_to_str(sync_from_time))
 
         with self._open_database() as db:
             # query from im
@@ -210,19 +210,19 @@ class ProjectSpider(object):
 
             # check result
             if result:
-                print ('\t[%d] bugs updated.' % count)
+                print('\t', '[%d] bugs updated.' % count)
                 last_modified_time = TimeUtil.time_sub(query_time, ProjectSpider._FROM_TIME_SHIFT)
                 self._mConfig.set_project_last_update_time(self._mProject, last_modified_time)
             else:
-                print ('\tfetch bugs failed')
+                print('\t', 'fetch bugs failed')
 
             db.commit()
 
-        print ('\tdone')
+        print('\t', 'done')
         return result
 
     def sync_raw(self, on_sync_raw_progress=None, thread_count=10):
-        print ('sync raw ...')
+        print('sync raw ...')
         if thread_count < 1:
             thread_count = 1
 
@@ -240,7 +240,7 @@ class ProjectSpider(object):
             count = 0
             total = len(rows)
 
-            print('\t[%d] raw bug info should be fetched.' % total)
+            print('\t', '[%d] raw bug info should be fetched.' % total)
 
             # notify progress
             if on_sync_raw_progress is not None:
@@ -266,10 +266,10 @@ class ProjectSpider(object):
                         alm_id = result['alm_id']
                         modified_time = result['modified_time']
                         if not result:
-                            print '\t[Failed] fetching bug# [%d/%d] id: %s, modified: %s' % (
-                                count, total, alm_id, modified_time)
+                            print('\t', '[Failed] fetching bug# [%d/%d] id: %s, modified: %s' % (
+                                count, total, alm_id, modified_time))
                         else:
-                            print('\t[Success] fetching bug# [%d/%d] id: %s, modified: %s' % (
+                            print('\t', '[Success] fetching bug# [%d/%d] id: %s, modified: %s' % (
                                 count, total, alm_id, modified_time))
 
                             # commit to free memory
@@ -280,7 +280,7 @@ class ProjectSpider(object):
                         break
 
             if self.is_canceled():
-                print ('\tcanceled!')
+                print('\t', 'canceled!')
 
             # close database
             db.commit()
@@ -289,7 +289,7 @@ class ProjectSpider(object):
         if on_sync_raw_progress is not None:
             on_sync_raw_progress(total, total)
 
-        print ('\tdone')
+        print('\t', 'done')
         return True
 
     def _sync_raw_thread_run(self, args, global_params):
@@ -317,7 +317,7 @@ class ProjectSpider(object):
         return result
 
     def sync_data(self, on_sync_data_progress=None):
-        print ('sync data ...')
+        print('sync data ...')
 
         with self._open_database() as db:
             c = db.cursor()
@@ -334,7 +334,7 @@ class ProjectSpider(object):
 
             for row in rows:
                 if self.is_canceled():
-                    print ('canceled!')
+                    print('canceled!')
                     break
 
                 count += 1
@@ -348,7 +348,7 @@ class ProjectSpider(object):
                 # compare new & old data. find out fields should be inserted, updated, deleted
                 to_insert = []
                 to_update = []
-                to_delete = old_data.keys()
+                to_delete = list(old_data.keys())
                 for key in new_data.keys():
                     if key in old_data:
                         to_update.append(key)
@@ -360,7 +360,7 @@ class ProjectSpider(object):
                         # key not found in to_delete. it's OK
                         pass
 
-                print('\tparsing from raw# [%d] ID: %s, insert: %d, update: %d, delete: %d' %
+                print('\t', 'parsing from raw# [%d] ID: %s, insert: %d, update: %d, delete: %d' %
                       (count, bug_id, len(to_insert), len(to_update), len(to_delete)))
 
                 # update database
@@ -382,7 +382,7 @@ class ProjectSpider(object):
                 if on_sync_data_progress is not None:
                     on_sync_data_progress(count, total)
 
-            print('\t[%d] parser from raw finished.' % count)
+            print('\t', '[%d] parser from raw finished.' % count)
 
             # close cursor & database
             db.commit()
@@ -391,16 +391,11 @@ class ProjectSpider(object):
         if on_sync_data_progress is not None:
             on_sync_data_progress(total, total)
 
-        print ('\tdone')
+        print('\t', 'done')
 
     def _parse_raw_data(self, raw):
         # check parameter raw
-        if isinstance(raw, buffer):
-            raw = str(raw)
-        elif isinstance(raw, str):
-            # unnecessary to convert
-            pass
-        else:
+        if not isinstance(raw, str):
             raise TypeError('Invalid type of parameter raw')
 
         # parser lines
@@ -502,9 +497,9 @@ class ProjectSpider(object):
             db.execute(self._SQL_UPDATE_BUGS_DIRTY, (0, alm_id))
 
             # insert or update bug detail
-            ret = db.execute(self._SQL_INSERT_RAW, (alm_id, modified_time, buffer(TimeUtil.str_to_utf8(out)), 1))
+            ret = db.execute(self._SQL_INSERT_RAW, (alm_id, modified_time, out, 1))
             if ret.rowcount <= 0:
-                db.execute(self._SQL_UPDATE_RAW, (modified_time, buffer(TimeUtil.str_to_utf8(out)), 1, alm_id))
+                db.execute(self._SQL_UPDATE_RAW, (modified_time, out, 1, alm_id))
         else:
             print('failed to fetch bug %s\n%s' % (alm_id, err))
             return False

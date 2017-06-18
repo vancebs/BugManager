@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 from script.model.local_alm.cfg.Config import Config
-from Tkinter import *
+from tkinter.constants import *
 from script.controller.command.CmdNewExcel import CmdNewExcel
 from script.controller.command.CmdOpenExcel import CmdOpenExcel
 from script.controller.command.CmdRemoveExcel import CmdRemoveExcel
@@ -14,7 +14,7 @@ class OpenController(object):
         self.mListBox = None
 
     def cmd_open(self, view):
-        print ('cmd_open')
+        print('cmd_open')
         list_box = self.mListBox
 
         # get selected item path
@@ -34,7 +34,7 @@ class OpenController(object):
         self.reload_list()
 
     def cmd_new(self, view):
-        print ('cmd_new')
+        print('cmd_new')
 
         # new excel
         cmd = CmdNewExcel(view)
@@ -44,7 +44,7 @@ class OpenController(object):
         self.reload_list()
 
     def cmd_remove(self, view):
-        print ('cmd_remove')
+        print('cmd_remove')
         list_box = self.mListBox
 
         # get selected item path
@@ -91,7 +91,7 @@ class OpenController(object):
             list_box.select_set(0)
 
     def _open(self, path):
-        print ('open %s' + path)  # TODO
+        print('open %s' + path)  # TODO
 
     def _remove(self, path):
-        print ('remove %s' % path)
+        print('remove %s' % path)

@@ -9,18 +9,11 @@ class TimeUtil(object):
     _DATETIME_FORMAT_ENGLISH = '%b %d, %Y %I:%M:%S %p'
     _DATETIME_FORMAT_TARGET = _DATETIME_FORMAT_ENGLISH
     _DATETIME_FORMATS = (_DATETIME_FORMAT_CHINESE, _DATETIME_FORMAT_ENGLISH)
-    _CODEC_CHECK_LIST = (
-        'GBK',
-        'ascii',
-        'ISO-8859-2',
-        'windows-1252',
-        'GB2312'
-    )
 
     @staticmethod
     def format_time(time_src):
         time_formatted = None
-        if isinstance(time_src, str) or isinstance(time_src, unicode):
+        if isinstance(time_src, str) or isinstance(time_src, bytes):
             for f in TimeUtil._DATETIME_FORMATS:
                 try:
                     time_formatted = time.strptime(time_src, f)
@@ -29,13 +22,11 @@ class TimeUtil(object):
                     pass
 
             if time_formatted is None:
-                print('unknown format: ' + time_src)
-                raise ValueError('unknown format: ' + time_src)
+                print('unknown format: %s' % time_src)
+                raise ValueError('unknown format: %s' % time_src)
         elif isinstance(time_src, time.struct_time):
             time_formatted = time_src
         elif isinstance(time_src, float):
-            time_formatted = time.localtime(time_src)
-        elif isinstance(time_src, long):
             time_formatted = time.localtime(time_src)
         elif isinstance(time_src, int):  # treat int as float
             time_formatted = time.localtime(time_src)
@@ -52,19 +43,8 @@ class TimeUtil(object):
         return time.mktime(TimeUtil.format_time(time_src))
 
     @staticmethod
-    def format_time_to_long(time_src):
-        return long(time.mktime(TimeUtil.format_time(time_src)))
-
-    @staticmethod
-    def str_to_utf8(str_src):
-        # try decode with known types
-        for codec in TimeUtil._CODEC_CHECK_LIST:
-            # print('try codec: %s' % codec)
-            try:
-                return str_src.decode(codec).encode('utf-8')
-            except UnicodeDecodeError:
-                pass
-        raise UnicodeDecodeError('cannot detect codec')
+    def format_time_to_int(time_src):
+        return int(time.mktime(TimeUtil.format_time(time_src)))
 
     @staticmethod
     def current_time():

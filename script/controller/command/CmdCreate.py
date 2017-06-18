@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from ICommand import ICommand
+from script.controller.command.ICommand import ICommand
 from script.view.SyncProgressView import SyncProgressView
 from script.controller.SyncProgressController import SyncProgressController
 

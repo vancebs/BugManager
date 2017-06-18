@@ -2,8 +2,8 @@
 # -*- coding: UTF-8 -*-
 
 from threading import *
-from Queue import Queue
-from Queue import Empty
+from queue import Queue
+from queue import Empty
 
 
 class MultiThreadRunner(object):
